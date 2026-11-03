@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 import os
+from django.contrib.auth.models import User
 
 def getFileName(request, fileName):
     now_time = datetime.now().strftime("%Y%m%d%H:%M:%S")
@@ -37,3 +38,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_qty = models.IntegerField(null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
