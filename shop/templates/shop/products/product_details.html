@@ -36,7 +36,7 @@ ShopKart | Online Shopping
                 <h6 class="my-2">Offer Price: Rs. {{products.selling_price}}</h6>
                 <div class="my-3">
                     {% if products.quantity > 0 %}
-                    {% csrf_token %}
+                    <!-- {% csrf_token %} -->
                     <input type="hidden" value="{{ products.id }}" id="pid">
                     <p>
                     <div class="input-group" style="width: 150px;">
@@ -56,7 +56,7 @@ ShopKart | Online Shopping
                     {% else %}
                     <button class="btn btn-secondary"><i class="fa fa-minus"></i>Out of Stock</button>
                     {% endif %}
-                    <button class="btn btn-danger"><i class="fa fa-heart"></i></button>
+                    <button class="btn btn-danger" id="btnFav"><i class="fa fa-heart"></i></button>
                 </div>
             </div>
 
@@ -68,8 +68,9 @@ ShopKart | Online Shopping
         const btnMinus = document.getElementById("btnMinus")
         const txtQty = document.getElementById("txtQty")
         const pid = document.getElementById("pid")
-        const tkn = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+        // const tkn = document.querySelector('[name="csrfmiddlewaretoken"]').value;
         const btnCart = document.getElementById("btnCart")
+        const btnFav = document.getElementById("btnFav")
 
 
         btnPlus.addEventListener("click", function() {
@@ -90,20 +91,61 @@ ShopKart | Online Shopping
             }
         })
 
+        
         btnCart.addEventListener("click", function() {
             let qty = parseInt(txtQty.value, 10);
             qty = isNaN(qty)?0:qty
             if(qty>0){
                 let postObj = {
                     product_qty: qty,
-                    pid: pid.value,
-                    token: tkn
+                    pid: pid.value
+                    // token: tkn
                 }
-                console.log(postObj)
+                // console.log(postObj)
+
+                fetch("/api/addtocart/",{
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: JSON.stringify(postObj)
+                }).then(response => {
+                    return response.json();
+                }).then(data => {
+                    // console.log(data)
+                    alert(data['status'])
+                })
 
             }else{
                 alert("Please enter the quantity")
             }
+        })
+
+        btnFav.addEventListener("click", function() {
+                let postObj = {
+                    pid: pid.value
+                    // token: tkn
+                }
+                // console.log(postObj)
+
+                fetch("/api/fav/",{
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: JSON.stringify(postObj)
+                }).then(response => {
+                    return response.json();
+                }).then(data => {
+                    // console.log(data)
+                    alert(data['status'])
+                })
         })
 
     })

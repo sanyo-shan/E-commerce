@@ -9,6 +9,10 @@ urlpatterns = [
     path('collections/', collections, name = 'collections'),
     path('collections/<str:product>', collectionView, name = 'collections'),
     path('collections/<str:cname>/<str:pname>', productDetails, name='collections'),
-    path('addtocart/', cart, name='addToCart'),
-
+    path('addtocart/', addToCart, name='addToCart'),
+    path('cart/', cart, name='cart'),
+    path('removecart/<str:cid>', removeCart, name="removecart"),
+    path('fav/', fav, name="fav"),
+    path('favviewpage/', favViewPage, name="favviewpage"),
+    path('removefav/<str:pid>', favRemove, name="removefav")
 ]

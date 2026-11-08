@@ -1,0 +1,41 @@
+{% extends 'shop/layouts/main.html' %}
+
+{% block title %}
+ShopKart | Online Shopping
+{% endblock title %}
+
+{% block content %}
+<div class="container" style="margin-top: 70px;">
+    <div class="row">
+        <div class="col-12">
+            <h1> Favourites </h1>
+        </div>
+        <div class="col-md-4 col-lg-3">
+            <div class="card my-3">
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Image</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Remove </th>
+                    </tr></thead>
+                    <tbody>
+                    {% for item in fav %}
+                    <tr>
+                        <td scope="row"><img src="{{item.product.product_image.url}}" height="75px" width="120px" alt="{{item.product_name}}"></td>
+                        <td>{{item.product.name}}</td>
+                        <td>{{item.product.selling_price|stringformat:'d'}}</td>
+                        <td><a href="{% url 'removefav' item.id %}"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Remove</button></a></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
